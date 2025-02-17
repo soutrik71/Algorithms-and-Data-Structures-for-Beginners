@@ -7,18 +7,22 @@
 ## Key Operations & Time Complexities
 
 ### 1. Reading from an Array
+
 - **Operation:** Access an element by its index
 - **Time Complexity:** O(1)
 - **Example:**
+
   ```python
   myArray = [1, 3, 5]
   element = myArray[i]  # Direct access via index i
   ```
 
 ### 2. Traversing an Array
+
 - **Operation:** Iterate over all elements
 - **Time Complexity:** O(n)
 - **Example:**
+
   ```python
   for i in range(len(myArray)):
       print(myArray[i])
@@ -27,9 +31,11 @@
 ### 3. Deleting from an Array
 
 #### a. Deleting from the End
+
 - **Operation:** Overwrite the last element with a default value (e.g., 0, -1, or null) and decrement the length.
 - **Time Complexity:** O(1)
 - **Example:**
+
   ```python
   def removeEnd(arr, length):
       if length > 0:
@@ -37,9 +43,11 @@
   ```
 
 #### b. Deleting at an Arbitrary Index
+
 - **Operation:** Remove element at index i by shifting subsequent elements left.
 - **Time Complexity:** O(n) (worst-case when deleting the first element)
 - **Example:**
+
   ```python
   def removeMiddle(arr, i, length):
       for index in range(i + 1, length):
@@ -49,9 +57,11 @@
 ### 4. Inserting into an Array
 
 #### a. Inserting at the End
+
 - **Operation:** Place the new element at the next available index (current length), if capacity permits.
 - **Time Complexity:** O(1)
 - **Example:**
+
   ```python
   def insertEnd(arr, n, length, capacity):
       if length < capacity:
@@ -59,6 +69,7 @@
   ```
 
 #### b. Inserting at an Arbitrary Index
+
 - **Operation:** Shift existing elements to the right starting from index i to make room for the new element.
 - **Time Complexity:** O(n)
 
@@ -72,11 +83,13 @@
 ## Insertion & Resizing
 
 ### Insertion at the End
+
 - **Process:**
   - Check if `length == capacity`.
     - If yes, call `resize()` to expand the array.
   - Insert the new element at the next empty index.
 - **Example:**
+
   ```python
   def pushback(self, n):
       if self.length == self.capacity:
@@ -86,12 +99,14 @@
   ```
 
 ### Resize Operation
+
 - **Process:**
   - Double the current capacity.
   - Create a new array with the new capacity.
   - Copy all elements from the old array to the new one.
   - Replace the old array with the new array.
 - **Example:**
+
   ```python
   def resize(self):
       self.capacity = 2 * self.capacity
@@ -128,3 +143,54 @@
 | **Deletion in Middle**  | O(n)          | Due to shifting elements                        |
 
 *Insertion and deletion at the end are O(1) in most cases.
+
+# Stacks
+
+- **Definition:**
+  - A stack is a dynamic data structure that operates on a LIFO (Last In, First Out) basis.
+  - Elements can only be added or removed from one end: the top of the stack.
+  - Often implemented using dynamic arrays.
+
+## Key Operations
+
+### 1. Push
+
+- **Purpose:** Add an element to the top of the stack.
+- **Time Complexity:** O(1)
+- **Example:**
+
+  ```python
+  def push(self, n):
+      self.stack.append(n)
+  ```
+
+### 2. Pop
+
+- **Purpose:** Remove and return the top element from the stack.
+- **Time Complexity:** O(1)
+- **Note:** Check if the stack is empty before popping.
+- **Example:**
+
+  ```python
+  def pop(self):
+      return self.stack.pop()
+  ```
+
+### 3. Peek
+
+- **Purpose:** Return the top element without removing it.
+- **Time Complexity:** O(1)
+- **Example:**
+
+  ```python
+  def peek(self):
+      return self.stack[-1]
+  ```
+
+## Time Complexity Summary
+
+| Operation   | Time Complexity | Notes                                 |
+|-------------|-----------------|---------------------------------------|
+| **Push**    | O(1)            | Add element to the top                |
+| **Pop**     | O(1)            | Remove element from the top (check for empty) |
+| **Peek**    | O(1)            | Retrieve the top element without removing it |
