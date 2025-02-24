@@ -194,3 +194,126 @@
 | **Push**    | O(1)            | Add element to the top                |
 | **Pop**     | O(1)            | Remove element from the top (check for empty) |
 | **Peek**    | O(1)            | Retrieve the top element without removing it |
+
+
+# Kadane's Algorithm
+
+Kadane's algorithm is a greedy/dynamic programming approach used to find the maximum sum subarray in an array. It efficiently computes the maximum subarray sum in **O(n)** time by making just one pass through the array.
+
+---
+
+## Motivation
+
+**Problem:** Find a non-empty subarray (i.e., contiguous elements) with the largest sum.
+
+A brute force solution would involve checking every possible subarray and computing its sum. For an array of length *n*, this approach results in **O(n²)** time complexity:
+
+```python
+def bruteForce(nums):
+    maxSum = nums[0]
+    for i in range(len(nums)):
+        curSum = 0
+        for j in range(i, len(nums)):
+            curSum += nums[j]
+            maxSum = max(maxSum, curSum)
+    return maxSum
+```
+
+Although this works, it's inefficient for large inputs.
+
+---
+
+## Kadane's Algorithm: The Intuition
+
+1. **All Positive Numbers:**  
+   If all elements are positive, the maximum sum subarray is the entire array.
+
+2. **Handling Negatives:**  
+   Negative numbers decrease the overall sum. However, sometimes including a negative number is necessary to reach subsequent positive numbers. For example:
+   - For `[6, -2, 7]`, the maximum sum is `11` (including the `-2`).
+   - For `[1, -3, 7]`, the maximum sum is `7` (excluding the `-3`).
+
+**Key Idea:**  
+If the current subarray sum becomes negative, it is better to start a new subarray from the next element, as the negative sum would only drag down any further addition.
+
+---
+
+## Kadane's Algorithm Implementation
+
+```python
+def kadanes(nums):
+    maxSum = nums[0]
+    curSum = 0
+
+    for n in nums:
+        # If the current sum is negative, discard it and start fresh.
+        curSum = max(curSum, 0)
+        curSum += n
+        maxSum = max(maxSum, curSum)
+    return maxSum
+```
+
+### Explanation
+
+- **Initialization:**  
+  `maxSum` is initialized to the first element to handle cases where all numbers are negative. `curSum` starts at `0`.
+
+- **Iteration:**  
+  For each number in the list, reset `curSum` to `0` if it is negative before adding the current number. Then update `maxSum` if `curSum` exceeds it.
+
+- **Edge Case:**  
+  If every element is negative, `maxSum` will correctly be the largest negative number.
+
+---
+
+## Sliding Window Variant
+
+Sometimes, you might need to return the actual subarray with the maximum sum, not just the sum itself. This can be done by keeping track of the indices defining the subarray (a "window").
+
+```python
+def slidingWindow(nums):
+    maxSum = nums[0]
+    curSum = 0
+    maxL, maxR = 0, 0  # To store the indices of the max subarray
+    L = 0  # Left pointer of the current window
+
+    for R in range(len(nums)):
+        # If current sum is negative, reset and start a new window from index R.
+        if curSum < 0:
+            curSum = 0
+            L = R
+
+        curSum += nums[R]
+        if curSum > maxSum:
+            maxSum = curSum
+            maxL, maxR = L, R
+
+    return [maxL, maxR]  # Returns the starting and ending indices of the max subarray
+```
+
+### Explanation
+
+- **Window Pointers:**  
+  `L` and `R` denote the boundaries of the current window (subarray).  
+  `maxL` and `maxR` store the indices of the subarray with the maximum sum found so far.
+
+- **Logic:**  
+  If the current sum `curSum` drops below `0`, reset it and move the left pointer `L` to the current index `R`. Update the maximum sum and indices when a new maximum is found.
+
+---
+
+## Time & Space Complexity
+
+- **Time Complexity:**  
+  Both the standard and sliding window approaches run in **O(n)** time because they process the array with a single pass.
+
+- **Space Complexity:**  
+  **O(1)** extra space is used since only a few variables are maintained regardless of the input size.
+
+---
+
+## Closing Notes
+
+Kadane's algorithm is a powerful technique for solving maximum subarray problems efficiently. The sliding window variant further extends its utility by providing the exact subarray boundaries when needed. These techniques can also serve as a foundation for understanding more advanced problems that involve dynamic programming or variable-sized sliding windows.
+
+
