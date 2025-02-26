@@ -316,4 +316,105 @@ def slidingWindow(nums):
 
 Kadane's algorithm is a powerful technique for solving maximum subarray problems efficiently. The sliding window variant further extends its utility by providing the exact subarray boundaries when needed. These techniques can also serve as a foundation for understanding more advanced problems that involve dynamic programming or variable-sized sliding windows.
 
+# Sliding Window (Fixed)
+
+The idea behind a fixed sliding window is to maintain two pointers that are `k` apart and satisfy a certain constraint.
+
+---
+
+## Motivation
+
+**Problem:**  
+Given an array, return `True` if there are two elements within a window of size `k` that are equal.
+
+A brute-force solution would consider every subarray of size `k` and check for duplicates. For example, with the array `[1, 2, 3, 2, 3, 3]` and `k = 3`, the brute-force approach would inspect each possible subarray of size `k`.
+
+---
+
+## Brute-Force Approach
+
+```python
+def closeDuplicatesBruteForce(nums, k):
+    for L in range(len(nums)):
+        for R in range(L + 1, min(len(nums), L + k)):
+            if nums[L] == nums[R]:
+                return True
+    return False
+```
+
+This approach results in a time complexity of **O(n\*k)** (or **O(n²)** in the worst case).
+
+---
+
+## Sliding Window Approach
+
+We can optimize the brute-force solution using a sliding window along with a hash set. The set will store unique elements in the current window, enabling **O(1)** lookups.
+
+**Strategy:**
+
+- Maintain a window (using two pointers) that never exceeds size `k`.
+- As the window slides, remove the element that falls out of the window.
+- If a new element is already in the set (i.e., it's a duplicate within the window), return `True`.
+
+### Implementation
+
+```python
+def closeDuplicates(nums, k):
+    window = set()  # Current window of size <= k
+    L = 0
+
+    for R in range(len(nums)):
+        # Ensure the window size does not exceed k
+        if R - L + 1 > k:
+            window.remove(nums[L])
+            L += 1
+        # If the element is already in the window, a duplicate exists
+        if nums[R] in window:
+            return True
+        window.add(nums[R])
+
+    return False
+```
+
+---
+
+## Time and Space Complexity
+
+- **Time Complexity:**  
+  The algorithm performs a single pass through the array, resulting in **O(n)** time. Each set operation (lookup, addition, and removal) is **O(1)** on average.
+
+- **Space Complexity:**  
+  The space used is **O(k)** since the set holds at most `k` distinct elements.
+
+# Sliding Window (Variable Size)
+
+Another variation of the sliding window technique is the variable size sliding window. This is useful when we don't have a fixed window size and need to keep expanding our window as long as it meets a certain constraint.
+
+---
+
+## Simple Example
+
+**Problem:**  
+Find the length of the longest subarray where every element is the same.
+
+**Approach:**  
+- Use two pointers, `L` and `R`, to define the current window.
+- The constraint is that all values in the window must be identical.
+- Start at the beginning and expand the window from the right.
+- When a new value is encountered (i.e., `nums[L] != nums[R]`), reset the window by setting `L` to `R`.
+- Update the maximum length using the current window size (`R - L + 1`).
+
+**Code Example:**
+
+```python
+def longestSubarray(nums):
+    length = 0
+    L = 0
+    
+    for R in range(len(nums)):
+        if nums[L] != nums[R]:
+            L = R 
+        length = max(length, R - L + 1)
+    return length
+```
 
